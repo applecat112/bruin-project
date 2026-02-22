@@ -1,7 +1,7 @@
 """@bruin
 
 # Convention: ingestion.<asset_name>
-name: ingestion.nyc_taxi_trips
+name: ingestion.trips
 
 type: python
 
