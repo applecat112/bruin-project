@@ -10,3 +10,4 @@ pandas
 requests
 pyarrow
 python-dateutil
+tzdata
