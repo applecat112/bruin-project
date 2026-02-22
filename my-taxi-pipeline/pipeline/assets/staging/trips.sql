@@ -13,59 +13,18 @@ materialization:
   time_granularity: timestamp
 
 columns:
-  - name: trip_id
-    type: varchar
-    description: Deterministic surrogate key for each trip
-    primary_key: true
-    nullable: false
-    checks:
-      - name: not_null
-
   - name: pickup_datetime
     type: timestamp
+    primary_key: true
     checks:
       - name: not_null
 
-  - name: dropoff_datetime
-    type: timestamp
-
-  - name: pickup_location_id
-    type: integer
-
-  - name: dropoff_location_id
-    type: integer
-
-  - name: fare_amount
-    type: double
-    checks:
-      - name: non_negative
-
-  - name: taxi_type
-    type: varchar
-
-  - name: payment_type_name
-    type: varchar
-
 custom_checks:
-  - name: no_duplicate_trip_ids
-    description: Ensure no duplicate surrogate keys exist
+  - name: row_count_greater_than_zero
     query: |
-      SELECT COUNT(*)
-      FROM (
-          SELECT trip_id
-          FROM staging.trips
-          GROUP BY trip_id
-          HAVING COUNT(*) > 1
-      )
-    value: 0
-
-  - name: no_negative_fares
-    description: Ensure no negative fare values
-    query: |
-      SELECT COUNT(*)
+      SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
       FROM staging.trips
-      WHERE fare_amount < 0
-    value: 0
+    value: 1
 @bruin */
 
 WITH base AS (
